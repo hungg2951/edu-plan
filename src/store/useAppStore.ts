@@ -21,6 +21,10 @@ interface AppState {
   khoaHocs: KhoaHoc[];
   dangKys: DangKy[];
 
+  // ─── Khởi tạo / reset dữ liệu ───
+  loadSeedData: () => void;
+  resetData: () => void;
+
   // ─── Giảng viên ───
   addGiangVien: (gv: Omit<GiangVien, 'id' | 'ngayTao'>) => void;
   updateGiangVien: (id: string, gv: Partial<GiangVien>) => void;
@@ -70,11 +74,29 @@ interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
-      giangViens: seedGiangVien,
-      hocViens: seedHocVien,
-      phongHocs: seedPhongHoc,
-      khoaHocs: seedKhoaHoc,
-      dangKys: seedDangKy,
+      giangViens: [],
+      hocViens: [],
+      phongHocs: [],
+      khoaHocs: [],
+      dangKys: [],
+
+      // ─── Tạo dữ liệu mẫu ───
+      loadSeedData: () => set({
+        giangViens: seedGiangVien,
+        hocViens: seedHocVien,
+        phongHocs: seedPhongHoc,
+        khoaHocs: seedKhoaHoc,
+        dangKys: seedDangKy,
+      }),
+
+      // ─── Xóa sạch dữ liệu ───
+      resetData: () => set({
+        giangViens: [],
+        hocViens: [],
+        phongHocs: [],
+        khoaHocs: [],
+        dangKys: [],
+      }),
 
       // ─── Giảng viên ───
       addGiangVien: (gv) =>

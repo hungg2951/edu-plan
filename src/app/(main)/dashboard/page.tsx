@@ -14,8 +14,12 @@ export default function DashboardPage() {
   const {
     khoaHocs, giangViens, hocViens, dangKys,
     getTenGiangVien, getTenPhongHoc, getSoLuongDangKy,
-    getKhoaNguyCo,
+    getKhoaNguyCo, loadSeedData, resetData,
   } = useAppStore();
+
+  const isDataEmpty = useMemo(() => {
+    return giangViens.length === 0 && hocViens.length === 0 && khoaHocs.length === 0;
+  }, [giangViens, hocViens, khoaHocs]);
 
   // KPI
   const kpi = useMemo(() => {
@@ -73,11 +77,30 @@ export default function DashboardPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Tổng quan</h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Cập nhật {new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}
-        </p>
+      <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800">Tổng quan</h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Cập nhật {new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {isDataEmpty ? (
+            <button
+              onClick={loadSeedData}
+              className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+            >
+              📥 Khởi tạo dữ liệu mẫu
+            </button>
+          ) : (
+            <button
+              onClick={resetData}
+              className="px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors"
+            >
+              🗑️ Xóa sạch dữ liệu
+            </button>
+          )}
+        </div>
       </div>
 
       {/* KPI Cards */}
