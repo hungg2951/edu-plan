@@ -210,7 +210,7 @@ export default function DashboardPage() {
                           </p>
                         </div>
                         <span className="text-xs font-semibold text-amber-700 bg-amber-100 px-2 py-1 rounded-lg shrink-0 whitespace-nowrap">
-                          Còn thiếu {con} HV
+                          Còn thiếu {con} học viên
                         </span>
                       </div>
                       <ProgressBar value={soLuong} max={khoa.soLuongToiDa} min={khoa.soLuongToiThieu} size="sm" />

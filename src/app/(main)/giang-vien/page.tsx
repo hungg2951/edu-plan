@@ -8,6 +8,7 @@ import { SearchInput } from '@/components/ui/SearchInput';
 import { Pagination } from '@/components/ui/Pagination';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { GiangVienModal } from '@/components/giang-vien/GiangVienModal';
+import { Modal } from '@/components/ui/Modal';
 import { vietSearch, formatNgay } from '@/lib/vietnameseUtils';
 import { xuatLichDayGiangVien } from '@/lib/exportUtils';
 
@@ -47,8 +48,8 @@ export default function GiangVienPage() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Quản lý giảng viên</h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -57,82 +58,84 @@ export default function GiangVienPage() {
         </div>
         <button
           onClick={openAdd}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm text-center"
         >
           + Thêm giảng viên
         </button>
       </div>
 
-      <div className="flex items-center justify-between gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <SearchInput
           value={search}
           onChange={(v) => { setSearch(v); setPage(1); }}
           placeholder="Tìm tên, chuyên môn, email..."
-          className="w-72"
+          className="w-full sm:w-72"
         />
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-slate-100 bg-slate-50">
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Họ và tên</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Chuyên môn</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Liên hệ</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Ngày gia nhập</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Trạng thái</th>
-              <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Thao tác</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50">
-            {paginated.length === 0 && (
-              <tr>
-                <td colSpan={6} className="py-12 text-center text-slate-400 text-sm">
-                  {search ? 'Không tìm thấy giảng viên phù hợp' : 'Chưa có giảng viên nào'}
-                </td>
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-sm min-w-[600px] sm:min-w-0">
+            <thead>
+              <tr className="border-b border-slate-100 bg-slate-50">
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Họ và tên</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Chuyên môn</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Liên hệ</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Ngày gia nhập</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Trạng thái</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Thao tác</th>
               </tr>
-            )}
-            {paginated.map((gv) => (
-              <tr key={gv.id} className="hover:bg-slate-50 transition-colors">
-                <td className="px-4 py-3 font-medium text-slate-800">{gv.ten}</td>
-                <td className="px-4 py-3 text-slate-600">{gv.chuyenMon}</td>
-                <td className="px-4 py-3">
-                  <div className="text-xs">
-                    <p className="text-slate-600">{gv.email}</p>
-                    <p className="text-slate-400 mt-0.5">{gv.sdt}</p>
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{formatNgay(gv.ngayTao)}</td>
-                <td className="px-4 py-3">
-                  <Badge variant={gv.trangThai} />
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center justify-end gap-1">
-                    <button
-                      onClick={() => openEdit(gv)}
-                      className="px-2.5 py-1.5 text-xs text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      onClick={() => handleExportExcel(gv)}
-                      className="px-2.5 py-1.5 text-xs text-green-600 hover:bg-green-50 rounded-md transition-colors font-medium"
-                      title="Xuất lịch dạy giảng viên ra Excel"
-                    >
-                      Xuất lịch
-                    </button>
-                    <button
-                      onClick={() => { setDeleteTarget(gv); setDeleteError(''); }}
-                      className="px-2.5 py-1.5 text-xs text-red-500 hover:bg-red-50 rounded-md transition-colors"
-                    >
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {paginated.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-slate-400 text-sm">
+                    {search ? 'Không tìm thấy giảng viên phù hợp' : 'Chưa có giảng viên nào'}
+                  </td>
+                </tr>
+              )}
+              {paginated.map((gv) => (
+                <tr key={gv.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-4 py-3 font-medium text-slate-800 whitespace-nowrap">{gv.ten}</td>
+                  <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{gv.chuyenMon}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <div className="text-xs">
+                      <p className="text-slate-600">{gv.email}</p>
+                      <p className="text-slate-400 mt-0.5">{gv.sdt}</p>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{formatNgay(gv.ngayTao)}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <Badge variant={gv.trangThai} />
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={() => openEdit(gv)}
+                        className="px-2.5 py-1.5 text-xs text-slate-600 hover:bg-slate-100 rounded-md transition-colors"
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        onClick={() => handleExportExcel(gv)}
+                        className="px-2.5 py-1.5 text-xs text-green-600 hover:bg-green-50 rounded-md transition-colors font-medium"
+                        title="Xuất lịch dạy giảng viên ra Excel"
+                      >
+                        Xuất lịch
+                      </button>
+                      <button
+                        onClick={() => { setDeleteTarget(gv); setDeleteError(''); }}
+                        className="px-2.5 py-1.5 text-xs text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="px-4 border-t border-slate-100">
           <Pagination

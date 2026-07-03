@@ -95,9 +95,9 @@ export default function KhoaHocPage() {
   const THU_VI = ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Quản lý khóa học</h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -106,7 +106,7 @@ export default function KhoaHocPage() {
         </div>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
         >
           + Thêm khóa học
         </button>
@@ -135,12 +135,12 @@ export default function KhoaHocPage() {
       {viewTab === 'list' && (
         <>
           {/* Filters */}
-          <div className="flex flex-wrap items-center gap-3 mb-4">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-3 mb-4">
             <SearchInput
               value={search}
               onChange={(v) => { setSearch(v); setPage(1); }}
               placeholder="Tìm tên khóa, giảng viên..."
-              className="w-72"
+              className="w-full lg:w-72"
             />
             <div className="flex gap-1 flex-wrap">
               {TRANG_THAI_FILTER.map((tt) => (
@@ -161,26 +161,27 @@ export default function KhoaHocPage() {
 
           {/* Table */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50">
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tên khóa học</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Giảng viên</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Phòng</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Khai giảng</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Đăng ký</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Trạng thái</th>
-                  <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {paginated.length === 0 && (
-                  <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-400 text-sm">
-                      {search || filterTT !== 'Tất cả' ? 'Không tìm thấy kết quả phù hợp' : 'Chưa có khóa học nào'}
-                    </td>
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-sm min-w-[850px] sm:min-w-0">
+                <thead>
+                  <tr className="border-b border-slate-100 bg-slate-50">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Tên khóa học</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Giảng viên</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Phòng</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Khai giảng</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Đăng ký</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Trạng thái</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Thao tác</th>
                   </tr>
-                )}
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {paginated.length === 0 && (
+                    <tr>
+                      <td colSpan={7} className="py-12 text-center text-slate-400 text-sm">
+                        {search || filterTT !== 'Tất cả' ? 'Không tìm thấy kết quả phù hợp' : 'Chưa có khóa học nào'}
+                      </td>
+                    </tr>
+                  )}
                 {paginated.map((khoa) => {
                   const soLuong = getSoLuongDangKy(khoa.id);
                   return (
@@ -228,6 +229,7 @@ export default function KhoaHocPage() {
                 })}
               </tbody>
             </table>
+          </div>
 
             <div className="px-4 border-t border-slate-100">
               <Pagination
@@ -250,13 +252,13 @@ export default function KhoaHocPage() {
           {calendarGrouped.length === 0 ? (
             <div className="py-12 text-center text-slate-400 text-sm">Chưa có buổi học nào</div>
           ) : (
-            <div className="divide-y divide-slate-100 max-h-[600px] overflow-y-auto">
+            <div className="divide-y divide-slate-100 max-h-[600px] overflow-y-auto w-full overflow-x-auto">
               {calendarGrouped.map(([ngay, items]) => {
                 const d = new Date(ngay);
                 const thu = THU_VI[d.getDay()];
                 const isToday = ngay === new Date().toISOString().slice(0, 10);
                 return (
-                  <div key={ngay} className="flex gap-0">
+                  <div key={ngay} className="flex gap-0 min-w-[650px]">
                     {/* Date column */}
                     <div className={`w-24 shrink-0 px-4 py-3 text-right border-r border-slate-100 ${isToday ? 'bg-blue-50' : ''}`}>
                       <p className={`text-xs font-semibold ${isToday ? 'text-blue-600' : 'text-slate-500'}`}>{thu}</p>

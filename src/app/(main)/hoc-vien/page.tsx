@@ -8,6 +8,7 @@ import { SearchInput } from '@/components/ui/SearchInput';
 import { Pagination } from '@/components/ui/Pagination';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { HocVienModal } from '@/components/hoc-vien/HocVienModal';
+import { Modal } from '@/components/ui/Modal';
 import { vietSearch, formatNgay } from '@/lib/vietnameseUtils';
 
 const PAGE_SIZE = 10;
@@ -42,8 +43,8 @@ export default function HocVienPage() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Quản lý học viên</h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -52,23 +53,24 @@ export default function HocVienPage() {
         </div>
         <button
           onClick={openAdd}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-sm text-center"
         >
           + Thêm học viên
         </button>
       </div>
 
-      <div className="mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <SearchInput
           value={search}
           onChange={(v) => { setSearch(v); setPage(1); }}
           placeholder="Tìm tên học viên, email, số điện thoại..."
-          className="w-72"
+          className="w-full sm:w-72"
         />
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-sm min-w-[700px] sm:min-w-0">
           <thead>
             <tr className="border-b border-slate-100 bg-slate-50">
               <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Họ và tên</th>
@@ -121,6 +123,7 @@ export default function HocVienPage() {
             ))}
           </tbody>
         </table>
+      </div>
 
         <div className="px-4 border-t border-slate-100">
           <Pagination

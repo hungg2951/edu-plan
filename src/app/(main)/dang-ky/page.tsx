@@ -115,7 +115,7 @@ export default function DangKyPage() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Left Column: Register Form */}
       <div className="space-y-6">
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
@@ -229,18 +229,19 @@ export default function DangKyPage() {
 
       {/* Right Column: Registrations List (2/3 size) */}
       <div className="lg:col-span-2 space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h2 className="text-lg font-bold text-slate-800">Danh sách đăng ký toàn hệ thống</h2>
           <SearchInput
             value={search}
             onChange={(v) => { setSearch(v); setPage(1); }}
             placeholder="Tìm theo tên học viên, lớp..."
-            className="w-64"
+            className="w-full sm:w-64"
           />
         </div>
 
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-sm min-w-[650px] sm:min-w-0">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50">
                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Học viên</th>
@@ -290,6 +291,7 @@ export default function DangKyPage() {
               ))}
             </tbody>
           </table>
+        </div>
 
           <div className="px-4 border-t border-slate-100">
             <Pagination
